@@ -1,0 +1,401 @@
+:host {
+  display: block;
+  padding: 10px 30px 30px 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f9f9;
+  min-height: 100vh;
+}
+
+
+h2 {
+  text-align: left;
+  color: #4a90e2;
+  margin-bottom: 10px;
+  font-size: 2em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+
+  border-spacing: 0;
+
+  border: none;
+
+  margin-top: 0 !important;
+}
+
+
+th {
+  background: linear-gradient(90deg, #4a90e2, #357ABD);
+  color: white;
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+th:nth-child(1) {
+  width: 10%;
+}
+
+
+th:nth-child(2) {
+  width: 15%;
+}
+
+
+th:nth-child(3) {
+  width: 30%;
+}
+
+
+th:nth-child(4) {
+  width: 15%;
+}
+
+/* 5. DOSAGE FORM */
+th:nth-child(5) {
+  width: 30%;
+}
+
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+
+tbody tr:nth-child(even) {
+  background: #f4f6f8;
+}
+
+
+tbody tr:hover {
+  background: #e1f0ff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+
+em {
+  display: block;
+  text-align: center;
+  color: #888;
+  font-size: 1.1em;
+  margin-top: 20px;
+}
+
+
+.pagination-controls {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-controls button {
+  padding: 5px 12px;
+  border: none;
+  background-color: #4a90e2;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-controls button:hover:not([disabled]) {
+  background-color: #357ABD;
+}
+
+.pagination-controls button:disabled {
+  background-color: #75b1f5;
+  cursor: not-allowed;
+}
+
+
+.alphabet-buttons {
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+  justify-content: center;
+}
+
+.alphabet-buttons button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.alphabet-buttons button:hover {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.alphabet-buttons .all-btn {
+  background-color: #d4d4d4;
+}
+
+
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+.back-to-top:hover {
+  background-color: #007bff;
+}
+
+
+tr {
+  cursor: pointer;
+  transition: none !important;
+}
+
+tr:hover td {
+  background-color: #e1f0ff !important;
+}
+
+
+
+tr.selected {
+  background-color: #4a90e2 !important;
+  color: white !important;
+}
+
+
+tr.selected td {
+  background-color: #4a90e2 !important;
+  color: white !important;
+  border-color: #4a90e2 !important;
+}
+
+
+
+
+.selected-icon {
+  font-size: 1.2em;
+  display: block;
+  text-align: center;
+  color: white;
+  /* Da se vidi na tamnoj pozadini */
+  font-weight: bold;
+}
+
+
+
+.fixed-letter-actions {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.create-letter-btn,
+.empty-list-btn {
+  padding: 10px 15px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s;
+}
+
+.create-letter-btn {
+  background-color: #4CAF50;
+}
+
+.create-letter-btn:hover:not([disabled]) {
+  background-color: #45A049;
+}
+
+.create-letter-btn:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.empty-list-btn {
+  background-color: #dc3545;
+}
+
+.empty-list-btn:hover:not([disabled]) {
+  background-color: #c82333;
+}
+
+.empty-list-btn:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.letter-actions {
+  display: none;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 1000px;   /* smanjeno sa 1000px */
+  max-height: 100vh;   /* koristi 80% visine ekrana */
+  overflow-y: auto;   /* scroll ako sadržaj pređe */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.modal-content h3 {
+  color: #4a90e2;
+  margin-top: 0;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.modal-content h4 {
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.table-modal {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.table-modal th {
+  background: #f0f0f0;
+  color: #4a90e2;
+}
+
+.modal-content input[type="text"].letter-input-title {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.modal-content textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  resize: vertical;
+  min-height: 100px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h4:last-of-type + textarea {
+    min-height: 150px; 
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-send,
+.btn-cancel {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+
+.btn-send {
+  background-color: #4a90e2;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-send:hover:not([disabled]) {
+  background-color: #357ABD;
+}
+
+.btn-send:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background-color: #b3b3b3;
+}
+
+.file-input-wrapper {
+  width: 100%;
+  padding: 5px 0;
+  margin-bottom: 10px;
+}
+
+.file-input-wrapper input[type="file"] {
+  width: 100%;
+  display: block;
+}
+
+
+
+/* CSS fajl za medication list komponentu */
