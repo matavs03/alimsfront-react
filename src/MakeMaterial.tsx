@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./styles/medication-list.css";
 
-// TypeScript interface matching Java DTO
+// pravimo interface koji kao onaj koji dobijamo iz beka
 interface MedicationDTO {
   id: string;
   name: string;
@@ -10,18 +10,19 @@ interface MedicationDTO {
   dosage_form: string;
 }
 
-// Fetch medications from backend API
+// funkcija za fetchovanje lekova iz api-ja
+// asinhrona funkcija ne koci izvrsenje programa i daje obecanje da ce vratiti niz objekata MedicationDTO
 const getMedicationList = async (): Promise<MedicationDTO[]> => {
   try {
-    const response = await fetch('http://localhost:8080/api/v1/medications');
+    const response = await fetch('http://localhost:8080/api/v1/medications'); //fetch salje GET zahtev na endpoint
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data: MedicationDTO[] = await response.json();
-    console.log('Fetched medications:', data); // Debug: Check the structure
-    console.log('First medication:', data[0]); // Debug: Check first item
+    console.log('Fetched medications:', data); // debug
+    console.log('First medication:', data[0]); // debug
     return data;
   } catch (error) {
     console.error('Error fetching medications:', error);
@@ -30,27 +31,27 @@ const getMedicationList = async (): Promise<MedicationDTO[]> => {
 };
 
 const MakeMaterial: React.FC = () => {
-  // Get admin info from URL parameters (must be used in a Router context)
+  // ucitavanje admin parametara iz urla
   const urlParams = new URLSearchParams(window.location.search);
   const adminName = urlParams.get("name") || "vesa";
   const adminId = urlParams.get("id") || "1";
 
-  // State management - Using array for selected IDs
-  const [medications, setMedications] = useState<MedicationDTO[]>([]);
-  const [displayedMedications, setDisplayedMedications] = useState<MedicationDTO[]>([]);
-  const [currentLetter, setCurrentLetter] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [letterTitle, setLetterTitle] = useState<string>("");
-  const [letterDescription, setLetterDescription] = useState<string>("");
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  // deklarisanje svih varijabli
+  const [medications, setMedications] = useState<MedicationDTO[]>([]); // cela lista lekova
+  const [displayedMedications, setDisplayedMedications] = useState<MedicationDTO[]>([]); // trenutno prikazani
+  const [currentLetter, setCurrentLetter] = useState<string>(""); // odabrano slovo za filtriranje
+  const [currentPage, setCurrentPage] = useState<number>(1); // trenutna stranica default:1
+  const [totalPages, setTotalPages] = useState<number>(0); // ukupan broj stranica 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]); // id selektovanih lekova
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // da li je otvoren popup - default:false
+  const [letterTitle, setLetterTitle] = useState<string>(""); // naslov em
+  const [letterDescription, setLetterDescription] = useState<string>(""); // description 
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // selectovani fajlovi
   
   const pageSize: number = 100;
   const alphabet: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-  // Set URL params if missing
+  // proverava da li name i id postoje u urlu, ako ne stavlja default vrednosti vesa, 1.
   useEffect(() => {
     const currentParams = new URLSearchParams(window.location.search);
     if (!currentParams.get("name") || !currentParams.get("id")) {
@@ -60,16 +61,16 @@ const MakeMaterial: React.FC = () => {
     }
   }, [adminName, adminId]);
 
-  // Fetch medications on component mount
+  // cim se komponenta mountuje zovemo funkciju getMedications
   useEffect(() => {
     getMedications();
   }, []);
 
-  // Update displayed medications when filters change
+  // Updateuje prikazane lekove kad se promeni filter
   useEffect(() => {
     updateDisplayedMedications();
   }, [medications, currentLetter, currentPage]);
-
+  // get medications zove getMedicationList koji iz beka puni listu lekova
   const getMedications = async (): Promise<void> => {
     try {
       const data = await getMedicationList();
@@ -78,12 +79,12 @@ const MakeMaterial: React.FC = () => {
       console.error("Error fetching medications:", error);
     }
   };
-
+  // inicira filtraciju po slovu, stavlja stranicu na prvu za ta slova
   const filterByLetter = (letter: string): void => {
     setCurrentLetter(letter);
     setCurrentPage(1);
   };
-
+  // ovde se vrsi filtracija po slovu
   const updateDisplayedMedications = (): void => {
     let filtered = medications;
     
@@ -92,35 +93,36 @@ const MakeMaterial: React.FC = () => {
         med.name.toUpperCase().startsWith(currentLetter)
       );
     }
-    
+    // racunamo broj ukupnih stranica
     const total = Math.ceil(filtered.length / pageSize);
     setTotalPages(total);
-    
+    // indeks pocetnog leka
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
+    // Izdvaja jednu stranicu iz filtriranog niza i rezultat postavlja u stanje displayedMedications
     setDisplayedMedications(filtered.slice(start, end));
   };
-
+  // prima page kao parameter i ide na tu stranicu
   const goToPage = (page: number): void => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
-
+  // sledeca stranica
   const nextPage = (): void => {
     goToPage(currentPage + 1);
   };
-
+  // prethodna stranica
   const prevPage = (): void => {
     goToPage(currentPage - 1);
   };
-
+  // scroll to top
   const scrollToTop = (): void => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Get unique ID from medication - try multiple possible field names
+  // dobijanje id-a iz leka i pretvaranje ga u string
   const getMedicationId = (medication: MedicationDTO): string => {
-    // The API returns 'id' field
+
     const id = medication.id;
     
     if (!id) {
@@ -129,7 +131,7 @@ const MakeMaterial: React.FC = () => {
     
     return String(id);
   };
-
+  // funcija za selektovanje lekova iz tabele
   const onRowClick = (medication: MedicationDTO): void => {
     const medicationId = getMedicationId(medication);
     
@@ -138,18 +140,18 @@ const MakeMaterial: React.FC = () => {
       alert('Error: This medication has no valid ID');
       return;
     }
-
+    // azuriraj stanje selektovanih lekova
     setSelectedIds(prevIds => {
       const isCurrentlySelected = prevIds.includes(medicationId);
       
       if (isCurrentlySelected) {
-        // Remove if already selected
+        // ako kliknes na selektovan -> odselektuj
         const newIds = prevIds.filter(id => id !== medicationId);
         console.log(`Removed: ${medication.name} (${medicationId}). Total selected: ${newIds.length}`);
         console.log('Currently selected IDs:', newIds);
         return newIds;
       } else {
-        // Add if not selected
+        // selektuj ako vec nije
         const newIds = [...prevIds, medicationId];
         console.log(`Added: ${medication.name} (${medicationId}). Total selected: ${newIds.length}`);
         console.log('Currently selected IDs:', newIds);
@@ -157,19 +159,19 @@ const MakeMaterial: React.FC = () => {
       }
     });
   };
-
+  // provera da li je lek selektovan
   const isLekSelected = (medication: MedicationDTO): boolean => {
     const medicationId = getMedicationId(medication);
     return selectedIds.includes(medicationId);
   };
-
+  // vraca pune objekte (ne samo ideve)
   const getSelectedMedications = (): MedicationDTO[] => {
     return medications.filter(med => {
       const medicationId = getMedicationId(med);
       return selectedIds.includes(medicationId);
     });
   };
-
+  // otvara formu za dodavanje em
   const openModal = (): void => {
     if (selectedIds.length === 0) {
       alert("You have to select at least one medication");
@@ -178,20 +180,20 @@ const MakeMaterial: React.FC = () => {
     console.log('Opening modal with selected medications:', getSelectedMedications());
     setIsModalOpen(true);
   };
-
+  // zatvara formu za dodavanje em
   const closeModal = (): void => {
     setIsModalOpen(false);
     setLetterTitle("");
     setLetterDescription("");
     setSelectedFiles([]);
   };
-
+  // obrada fajlova odabranih preko input polja
   const onFileSelected = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files) {
       setSelectedFiles(Array.from(event.target.files));
     }
   };
-
+  // validacija
   const sendMaterial = async (): Promise<void> => {
     if (!letterTitle.trim()) {
       alert("Please enter a title!");
@@ -202,25 +204,26 @@ const MakeMaterial: React.FC = () => {
       alert("Please attach at least one file!");
       return;
     }
-
+    
     try {
+      // kreiraj FormData objekat za slanje podataka koji ukljucuje fajlove 
       const formData = new FormData();
-
+      // definisemo strukturu datatransferobjecta
       const materialDTO = {
         title: letterTitle,
         description: letterDescription,
         adminId: adminId,
         medicationIds: selectedIds
       };
-
+      // dodaj JSON podatke
       formData.append('material', new Blob([JSON.stringify(materialDTO)], {
         type: 'application/json'
       }));
-
+      // prolazimo kroz selektovane fajlove i dodajemo ih u objekat
       selectedFiles.forEach((file) => {
         formData.append('files', file);
       });
-
+      // saljemo ih na server
       const response = await fetch('http://localhost:8080/api/v1/materials', {
         method: 'POST',
         body: formData
@@ -229,7 +232,7 @@ const MakeMaterial: React.FC = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+      // ispis o uspehu
       alert('Material successfully uploaded!');
       setLetterTitle("");
       setLetterDescription("");
@@ -241,12 +244,12 @@ const MakeMaterial: React.FC = () => {
       alert('Error uploading material!');
     }
   };
-
+  // delete selection
   const emptySelectedMedications = (): void => {
     console.log('Clearing all selections. Previously had:', selectedIds.length);
     setSelectedIds([]);
   };
-
+  // kreiranje varijable koja sadrži pune objekte (DTO) svih selektovanih lekova
   const selectedMedications = getSelectedMedications();
 
   return (
@@ -356,7 +359,7 @@ const MakeMaterial: React.FC = () => {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Letter</h3>
+            <h3>Educational material</h3>
             <h4>Selected medication:</h4>
             <table className="table table-modal">
               <thead>
@@ -404,7 +407,7 @@ const MakeMaterial: React.FC = () => {
                 type="file"
                 onChange={onFileSelected}
                 multiple
-                accept="application/pdf,image/*"
+                accept="application/pdf,image/*,video/*"
               />
               {selectedFiles.length > 0 && (
                 <p style={{ marginTop: '5px', color: '#666', fontSize: '14px' }}>
